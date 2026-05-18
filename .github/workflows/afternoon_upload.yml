@@ -5,6 +5,9 @@ on:
     - cron: '0 18 * * *'   # 6pm UTC = 1pm EST
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   upload:
     runs-on: ubuntu-latest
