@@ -1,0 +1,45 @@
+name: Afternoon Upload (1pm EST)
+
+on:
+  schedule:
+    - cron: '0 18 * * *'   # 6pm UTC = 1pm EST
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: Restore YouTube credentials
+        run: |
+          mkdir -p credentials
+          echo "${{ secrets.YOUTUBE_CLIENT_SECRET_B64 }}" | base64 --decode > credentials/client_secret.json
+          echo "${{ secrets.YOUTUBE_TOKEN_JSON_B64 }}" | base64 --decode > credentials/token.json
+
+      - name: Run nursery rhyme bot
+        run: python3 main.py --slot afternoon
+
+      - name: Save updated uploaded.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: mark afternoon slot rhyme as uploaded"
+          file_pattern: data/uploaded.json
+          commit_user_name: "Nursery Bot"
+          commit_user_email: "bot@github-actions"

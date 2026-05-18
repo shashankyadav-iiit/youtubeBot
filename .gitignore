@@ -1,0 +1,9 @@
+credentials/
+temp/
+*.mp4
+*.mp3
+*.wav
+__pycache__/
+*.pyc
+.env
+output_*.mp4
