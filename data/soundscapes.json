@@ -1,0 +1,128 @@
+[
+  {
+    "id": "rain_window_v1",
+    "name": "Rain on Window",
+    "emoji": "🌧️",
+    "audio_recipe": "rain",
+    "video_query": "rain window night",
+    "visual_prompt": "cozy dark bedroom window with heavy rain at night, warm lamp glow, cinematic, calm, moody blue tones",
+    "seo_keywords": ["rain sounds for sleeping", "rain on window", "rain sounds black screen", "rain ambience"]
+  },
+  {
+    "id": "heavy_rain_thunder_v1",
+    "name": "Heavy Rain and Thunder",
+    "emoji": "⛈️",
+    "audio_recipe": "thunderstorm",
+    "video_query": "thunderstorm night dark clouds",
+    "visual_prompt": "dramatic dark stormy night sky with distant lightning, heavy rain, cinematic, deep navy tones",
+    "seo_keywords": ["thunderstorm sounds for sleeping", "rain and thunder", "thunder sounds", "storm ambience"]
+  },
+  {
+    "id": "ocean_waves_v1",
+    "name": "Ocean Waves",
+    "emoji": "🌊",
+    "audio_recipe": "ocean",
+    "video_query": "ocean waves night calm",
+    "visual_prompt": "calm dark ocean waves at night under moonlight, gentle surf, cinematic, deep blue tones",
+    "seo_keywords": ["ocean sounds for sleeping", "ocean waves", "sea sounds", "beach ambience"]
+  },
+  {
+    "id": "fireplace_v1",
+    "name": "Crackling Fireplace",
+    "emoji": "🔥",
+    "audio_recipe": "fireplace",
+    "video_query": "fireplace crackling closeup",
+    "visual_prompt": "cozy crackling fireplace in a dark room, warm orange glow, cinematic, intimate",
+    "seo_keywords": ["fireplace sounds", "crackling fire", "fireplace ambience", "fire sounds for sleeping"]
+  },
+  {
+    "id": "forest_night_v1",
+    "name": "Forest Night",
+    "emoji": "🌲",
+    "audio_recipe": "forest",
+    "video_query": "forest night dark trees",
+    "visual_prompt": "peaceful dark forest at night with soft moonlight through trees, calm, cinematic, deep green tones",
+    "seo_keywords": ["forest sounds at night", "nature sounds for sleeping", "night ambience", "forest ambience"]
+  },
+  {
+    "id": "mountain_stream_v1",
+    "name": "Mountain Stream",
+    "emoji": "🏞️",
+    "audio_recipe": "stream",
+    "video_query": "mountain stream flowing water",
+    "visual_prompt": "gentle mountain stream flowing over rocks in dim evening light, calm, cinematic, soft tones",
+    "seo_keywords": ["river sounds for sleeping", "stream sounds", "flowing water", "creek ambience"]
+  },
+  {
+    "id": "wind_blizzard_v1",
+    "name": "Wind and Blizzard",
+    "emoji": "❄️",
+    "audio_recipe": "wind",
+    "video_query": "snow blizzard night winter",
+    "visual_prompt": "dark snowy winter night with blowing snow, soft cabin light in distance, cinematic, cold blue tones",
+    "seo_keywords": ["blizzard sounds for sleeping", "wind sounds", "snowstorm ambience", "winter sounds"]
+  },
+  {
+    "id": "white_noise_v1",
+    "name": "White Noise",
+    "emoji": "⚪",
+    "audio_recipe": "white_noise",
+    "video_query": "dark abstract calm gradient",
+    "visual_prompt": "smooth dark abstract gradient, deep navy and charcoal, calm minimal, cinematic",
+    "seo_keywords": ["white noise for sleeping", "white noise baby", "white noise black screen", "white noise 10 hours"]
+  },
+  {
+    "id": "pink_noise_v1",
+    "name": "Pink Noise",
+    "emoji": "🌸",
+    "audio_recipe": "pink_noise",
+    "video_query": "dark soft pink abstract calm",
+    "visual_prompt": "smooth dark abstract gradient with soft muted pink and deep purple, calm minimal, cinematic",
+    "seo_keywords": ["pink noise for sleeping", "pink noise", "pink noise black screen", "deep sleep noise"]
+  },
+  {
+    "id": "brown_noise_v1",
+    "name": "Brown Noise",
+    "emoji": "🟤",
+    "audio_recipe": "brown_noise",
+    "video_query": "dark warm abstract calm gradient",
+    "visual_prompt": "smooth dark abstract gradient with warm brown and deep amber, calm minimal, cinematic",
+    "seo_keywords": ["brown noise for sleeping", "brown noise", "brown noise focus", "brown noise black screen"]
+  },
+  {
+    "id": "cozy_cabin_rain_v1",
+    "name": "Cozy Cabin Rain",
+    "emoji": "🏕️",
+    "audio_recipe": "rain",
+    "video_query": "cabin rain night cozy",
+    "visual_prompt": "cozy wooden cabin interior at night with rain outside the window, warm candlelight, cinematic",
+    "seo_keywords": ["cozy rain sounds", "cabin rain", "rain sounds for sleeping", "relaxing rain"]
+  },
+  {
+    "id": "distant_thunderstorm_v1",
+    "name": "Distant Thunderstorm",
+    "emoji": "🌩️",
+    "audio_recipe": "thunderstorm",
+    "video_query": "distant lightning night sky",
+    "visual_prompt": "vast dark night sky with distant soft lightning on the horizon, calm clouds, cinematic, deep tones",
+    "seo_keywords": ["distant thunder sounds", "soft thunderstorm", "rain and thunder for sleeping", "calm storm"]
+  },
+  {
+    "id": "rain_on_tent_v1",
+    "name": "Rain on Tent",
+    "emoji": "⛺",
+    "audio_recipe": "rain",
+    "video_query": "rain tent camping night",
+    "visual_prompt": "view from inside a tent at night with rain falling outside, soft warm interior glow, cinematic",
+    "seo_keywords": ["rain on tent sounds", "camping rain", "tent rain for sleeping", "relaxing rain sounds"]
+  },
+  {
+    "id": "night_crickets_v1",
+    "name": "Night Crickets",
+    "emoji": "🦗",
+    "audio_recipe": "forest",
+    "video_query": "summer night field stars",
+    "visual_prompt": "calm summer night field under a starry sky, soft moonlight, peaceful, cinematic, deep blue tones",
+    "seo_keywords": ["cricket sounds at night", "night sounds for sleeping", "summer night ambience", "nature night sounds"]
+  }
+]
