@@ -36,7 +36,8 @@ def generate_title(theme, duration_hours):
     name = theme["name"]
     emoji = theme.get("emoji", "🌙")
     benefit = random.choice(BENEFITS)
-    title = f"{name} {emoji} {benefit} | {duration_hours} Hours"
+    hour_word = "Hour" if duration_hours == 1 else "Hours"
+    title = f"{name} {emoji} {benefit} | {duration_hours} {hour_word}"
     return title[:100]
 
 
@@ -45,7 +46,9 @@ def generate_description(theme, duration_hours):
     emoji = theme.get("emoji", "🌙")
     kw = ", ".join(theme.get("seo_keywords", [])[:4])
 
-    return f"""{name} {emoji} — {duration_hours} hours of calming sounds for deep, restful sleep.
+    hour_word = "hour" if duration_hours == 1 else "hours"
+
+    return f"""{name} {emoji} — {duration_hours} {hour_word} of calming sounds for deep, restful sleep.
 
 Press play, dim the lights, and let these soothing sounds carry you into a peaceful night's sleep. This {duration_hours}-hour soundscape loops gently and consistently — perfect to leave playing all night long.
 
