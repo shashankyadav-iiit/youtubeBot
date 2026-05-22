@@ -19,6 +19,19 @@ SLOTS = ["night", "evening", "afternoon"]
 DURATIONS = [1, 3, 8]
 
 
+def _load_dotenv():
+    """Load KEY=VALUE pairs from a local .env into os.environ (if present)."""
+    env_file = Path(".env")
+    if not env_file.exists():
+        return
+    for line in env_file.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip())
+
+
 def main():
     parser = argparse.ArgumentParser(description="Sleep Soundscape Bot")
     parser.add_argument("--slot", default="night", choices=SLOTS,
@@ -30,6 +43,8 @@ def main():
     parser.add_argument("--private", action="store_true",
                         help="Upload as private (for testing)")
     args = parser.parse_args()
+
+    _load_dotenv()
 
     total_seconds = args.duration * 3600
 
