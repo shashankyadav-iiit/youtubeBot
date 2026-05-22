@@ -1,21 +1,17 @@
+"""
+script_generator.py — Soundscape theme selection with no-repeat tracking.
+"""
+
 import json
 import random
 from pathlib import Path
 
-RHYMES_FILE = Path("data/rhymes.json")
+SOUNDSCAPES_FILE = Path("data/soundscapes.json")
 UPLOADED_FILE = Path("data/uploaded.json")
 
-SLOT_PREFERENCES = {
-    "dawn": ["dawn", "morning"],
-    "morning": ["morning", "dawn", "afternoon"],
-    "afternoon": ["afternoon", "morning", "afterschool"],
-    "afterschool": ["afterschool", "afternoon", "morning"],
-    "evening": ["evening", "dawn"],
-}
 
-
-def load_rhymes():
-    with open(RHYMES_FILE) as f:
+def load_soundscapes():
+    with open(SOUNDSCAPES_FILE) as f:
         return json.load(f)
 
 
@@ -26,30 +22,23 @@ def load_uploaded():
         return json.load(f)
 
 
-def mark_uploaded(rhyme_id):
+def mark_uploaded(theme_id):
     uploaded = load_uploaded()
-    uploaded.append(rhyme_id)
+    uploaded.append(theme_id)
     with open(UPLOADED_FILE, "w") as f:
         json.dump(uploaded, f, indent=2)
 
 
-def get_next_rhyme(slot: str) -> dict:
-    rhymes = load_rhymes()
+def get_next_theme(slot=None):
+    """Pick a soundscape theme not yet uploaded. Auto-resets when all are used."""
+    themes = load_soundscapes()
     uploaded = load_uploaded()
 
-    remaining = [r for r in rhymes if r["id"] not in uploaded]
-
+    remaining = [t for t in themes if t["id"] not in uploaded]
     if not remaining:
-        # All rhymes used — reset cycle
+        # Every theme used — reset the cycle.
         with open(UPLOADED_FILE, "w") as f:
             json.dump([], f)
-        remaining = rhymes
-
-    # Prefer slot-matched rhymes
-    preferred_slots = SLOT_PREFERENCES.get(slot, [slot])
-    for preferred in preferred_slots:
-        slot_matches = [r for r in remaining if r.get("slot_preference") == preferred]
-        if slot_matches:
-            return random.choice(slot_matches)
+        remaining = themes
 
     return random.choice(remaining)

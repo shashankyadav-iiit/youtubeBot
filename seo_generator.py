@@ -1,121 +1,90 @@
+"""
+seo_generator.py — Sleep-niche YouTube SEO (title, description, tags).
+"""
+
+import random
+
 BASE_TAGS = [
-    "nursery rhymes", "kids songs", "children songs", "baby songs", "toddler songs",
-    "kids music", "preschool songs", "animated nursery rhymes", "nursery rhymes for babies",
-    "nursery rhymes for toddlers", "nursery rhymes for kids", "kids youtube",
-    "children music", "learning songs for kids", "bedtime songs", "baby rhymes",
-    "classic nursery rhymes", "youtube shorts", "shorts", "viral shorts",
-    "kids shorts", "lullaby", "abc song", "phonics", "alphabet song",
-    "baby learning", "fun for kids", "educational kids video", "toddler learning",
-    "baby development", "kids entertainment", "nursery rhyme 2024", "nursery rhyme 2025",
+    "sleep sounds", "sleeping sounds", "relaxing sounds", "sleep music",
+    "deep sleep", "insomnia relief", "fall asleep fast", "calming sounds",
+    "relaxation", "ambient sounds", "sounds for sleeping", "study sounds",
+    "focus sounds", "meditation sounds", "stress relief", "sleep aid",
+    "white noise", "soothing sounds", "nature sounds", "black screen sleep",
+    "sleep sounds black screen", "relaxing music", "sleep therapy",
+    "calm sleep", "night sounds", "background sounds", "anti stress",
 ]
 
-SLOT_DESCRIPTORS = {
-    "dawn": ("Sunrise", "early morning"),
-    "morning": ("Morning", "morning"),
-    "afternoon": ("Afternoon", "afternoon"),
-    "afterschool": ("Playtime", "after school"),
-    "evening": ("Bedtime", "evening"),
-}
-
-SLOT_AUDIENCE = {
-    "dawn": "Early Risers 🌅",
-    "morning": "Good Morning Babies ☀️",
-    "afternoon": "Playtime Fun 🎈",
-    "afterschool": "After School Fun 🎒",
-    "evening": "Lullaby & Bedtime 🌙",
-}
+BENEFITS = [
+    "Deep Sleep & Relaxation",
+    "Fall Asleep Fast",
+    "Insomnia Relief",
+    "Sleep, Study & Focus",
+    "Calm Your Mind",
+    "Stress Relief & Deep Sleep",
+]
 
 
-def generate_title(rhyme: dict, slot: str) -> str:
-    name = rhyme["title"]
-    emoji = rhyme.get("emoji", "🎵")
-    audience = SLOT_AUDIENCE.get(slot, "Kids 🎵")
-    title = f"{name} {emoji} | {audience} | Nursery Rhymes #Shorts"
-    return title[:100]
-
-
-def generate_description(rhyme: dict, slot: str) -> str:
-    name = rhyme["title"]
-    emoji = rhyme.get("emoji", "🎵")
-    lyrics = "\n".join(line["text"] for line in rhyme["lines"])
-    rhyme_tag = name.replace(" ", "")
-
-    return f"""{name} {emoji} | Nursery Rhymes for Kids
-
-{lyrics}
-
-🌟 New nursery rhyme every single day — Subscribe so you never miss one! 🔔
-
-👶 Perfect for:
-✅ Babies & Toddlers (0–5 years)
-✅ Preschool & Kindergarten
-✅ Learning through songs and music
-✅ Bedtime, playtime & car rides
-✅ Parents & caregivers at home
-
-📌 About this video:
-{name} is a beloved classic nursery rhyme enjoyed by children worldwide.
-This colorful animated version features bright visuals designed to engage
-and delight babies, toddlers, and young children!
-
-🎵 Watch more nursery rhymes on our channel for daily new videos!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#NurseryRhymes #KidsSongs #{rhyme_tag} #BabySongs #ToddlerSongs
-#ChildrenSongs #LearningForKids #KidsMusic #PreschoolSongs
-#BabyRhymes #AnimatedNurseryRhymes #KidsYouTube #Lullaby
-#KidsShorts #YouTubeShorts #Shorts #ViralKidsVideo
-#BabyLearning #FunForKids #EducationalKids #NurseryRhyme2025
-#ToddlerActivities #BabyDevelopment #KidsEntertainment
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"""
-
-
-def _clean_tag(tag: str) -> str:
+def _clean_tag(tag):
     """Keep ASCII letters/digits/spaces only, cap at 30 chars."""
     import re
-    tag = re.sub(r'[^A-Za-z0-9 ]', '', tag)
-    tag = re.sub(r'\s+', ' ', tag).strip().lower()
+    tag = re.sub(r"[^A-Za-z0-9 ]", "", tag)
+    tag = re.sub(r"\s+", " ", tag).strip().lower()
     return tag[:30]
 
 
-def generate_tags(rhyme: dict) -> list:
-    name = rhyme["title"]
-    name_lower = name.lower()
-    seo_keywords = rhyme.get("seo_keywords", [])
+def generate_title(theme, duration_hours):
+    name = theme["name"]
+    emoji = theme.get("emoji", "🌙")
+    benefit = random.choice(BENEFITS)
+    title = f"{name} {emoji} {benefit} | {duration_hours} Hours"
+    return title[:100]
 
-    rhyme_tags = [
-        name_lower,
-        f"{name_lower} nursery rhyme",
-        f"{name_lower} for kids",
-        f"{name_lower} animated",
-        f"{name_lower} song",
-        f"{name_lower} for babies",
-        f"{name_lower} for toddlers",
-    ] + seo_keywords
 
-    all_tags = list(dict.fromkeys(rhyme_tags + BASE_TAGS))
+def generate_description(theme, duration_hours):
+    name = theme["name"]
+    emoji = theme.get("emoji", "🌙")
+    kw = ", ".join(theme.get("seo_keywords", [])[:4])
 
-    # Clean each tag, drop empties
+    return f"""{name} {emoji} — {duration_hours} hours of calming sounds for deep, restful sleep.
+
+Press play, dim the lights, and let these soothing sounds carry you into a peaceful night's sleep. This {duration_hours}-hour soundscape loops gently and consistently — perfect to leave playing all night long.
+
+🌙 Great for:
+✅ Falling asleep faster & sleeping through the night
+✅ Insomnia, anxiety & stress relief
+✅ Studying, reading & deep focus
+✅ Relaxation, meditation & calming a busy mind
+✅ Soothing babies & creating a peaceful home
+
+🎧 For the best experience, use headphones or a speaker at a low, comfortable volume and let it play in the background.
+
+🔔 Subscribe for new {duration_hours}-hour sleep soundscapes — rain, ocean, fireplace, forest, white noise and more.
+
+Keywords: {kw}
+
+#sleepsounds #relaxing #deepsleep #insomnia #sleepmusic #whitenoise #relaxation #studymusic"""
+
+
+def generate_tags(theme):
+    keywords = theme.get("seo_keywords", [])
+    all_tags = list(dict.fromkeys(keywords + BASE_TAGS))
     all_tags = [_clean_tag(t) for t in all_tags if _clean_tag(t)]
 
-    # YouTube counts tags-with-spaces as len+2 (quotes wrap them).
-    # Keep a safety budget of 400 chars to avoid the 500 limit.
-    result = []
-    total_chars = 0
+    # YouTube counts space-containing tags as len+2 (quote-wrapped); budget 400.
+    result, total = [], 0
     for tag in all_tags:
         cost = len(tag) + (2 if " " in tag else 0) + 1
-        if total_chars + cost > 400:
+        if total + cost > 400:
             break
         result.append(tag)
-        total_chars += cost
-
+        total += cost
     return result
 
 
-def generate_seo(rhyme: dict, slot: str) -> dict:
+def generate_seo(theme, duration_hours):
     return {
-        "title": generate_title(rhyme, slot),
-        "description": generate_description(rhyme, slot),
-        "tags": generate_tags(rhyme),
-        "category_id": "22",
+        "title": generate_title(theme, duration_hours),
+        "description": generate_description(theme, duration_hours),
+        "tags": generate_tags(theme),
+        "category_id": "10",   # Music — standard for sleep/ambient channels
     }

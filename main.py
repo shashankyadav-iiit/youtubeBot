@@ -1,63 +1,76 @@
 #!/usr/bin/env python3
 """
-Nursery Rhyme YouTube Shorts Bot
-Generates and uploads a 30-second animated nursery rhyme video.
+Sleep Soundscape YouTube Bot
+Generates and uploads a long-form 4K relaxing soundscape video.
 
 Usage:
-  python main.py --slot morning             # generate and upload publicly
-  python main.py --slot evening --dry-run   # generate only, no upload
-  python main.py --slot afternoon --private # upload as private (for testing)
+  python3 main.py --slot night                      # generate + upload (3 hours)
+  python3 main.py --slot night --duration 1         # 1-hour video
+  python3 main.py --slot night --dry-run            # generate only, no upload
+  python3 main.py --slot night --duration 1 --private  # upload as private (test)
 """
 
 import argparse
 import os
 import shutil
-import tempfile
 from pathlib import Path
 
-SLOTS = ["dawn", "morning", "afternoon", "afterschool", "evening"]
+SLOTS = ["night", "evening", "afternoon"]
+DURATIONS = [1, 3, 8]
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Nursery Rhyme Shorts Bot")
-    parser.add_argument("--slot", required=True, choices=SLOTS,
-                        help="Upload slot (determines which rhyme and publish time)")
+    parser = argparse.ArgumentParser(description="Sleep Soundscape Bot")
+    parser.add_argument("--slot", default="night", choices=SLOTS,
+                        help="Publish slot (determines scheduled publish time)")
+    parser.add_argument("--duration", type=int, default=3, choices=DURATIONS,
+                        help="Video length in hours")
     parser.add_argument("--dry-run", action="store_true",
                         help="Generate video only, skip YouTube upload")
     parser.add_argument("--private", action="store_true",
                         help="Upload as private (for testing)")
     args = parser.parse_args()
 
-    temp_dir = Path("temp") / args.slot
+    total_seconds = args.duration * 3600
+
+    work_base = Path(os.environ.get("BOT_WORK_DIR", "temp"))
+    temp_dir = work_base / args.slot
     temp_dir.mkdir(parents=True, exist_ok=True)
     output_path = str(temp_dir / "output.mp4")
-    audio_path = str(temp_dir / "final_audio.wav")
+    audio_path = str(temp_dir / "soundscape.wav")
+    clip_path = str(temp_dir / "stock_clip.mp4")
+    image_path = str(temp_dir / "scene.png")
 
     try:
-        # 1. Select rhyme
-        from script_generator import get_next_rhyme, mark_uploaded
-        rhyme = get_next_rhyme(args.slot)
-        print(f"\n[{args.slot.upper()}] Selected: {rhyme['title']}")
+        # 1. Select soundscape theme
+        from script_generator import get_next_theme, mark_uploaded
+        theme = get_next_theme(args.slot)
+        print(f"\n[{args.slot.upper()}] Theme: {theme['name']} "
+              f"({args.duration}h)")
 
-        # 2. Generate scene images (in parallel calls)
-        print("\nStep 1/4: Generating scene images...")
-        from image_generator import generate_all_scenes
-        generate_all_scenes(rhyme["lines"], str(temp_dir))
+        # 2. Get visuals — Pexels stock clip, fall back to AI still
+        print("\nStep 1/4: Sourcing visuals...")
+        from stock_video import get_clip
+        visual_path = get_clip(theme["video_query"], clip_path)
+        is_video = visual_path is not None
+        if not is_video:
+            from image_generator import generate_scene
+            visual_path = generate_scene(theme["visual_prompt"], image_path)
 
-        # 3. Generate audio — returns per-line segment timings
-        print("\nStep 2/4: Generating audio...")
-        from audio_generator import generate_audio
-        segments = generate_audio(rhyme, audio_path, str(temp_dir))
+        # 3. Synthesize procedural soundscape audio
+        print("\nStep 2/4: Synthesizing soundscape audio...")
+        from soundscape_audio import generate_soundscape
+        generate_soundscape(theme["audio_recipe"], audio_path)
 
-        # 4. Build video — pass segment timings so video syncs to audio
+        # 4. Build the looped video
         print("\nStep 3/4: Building video...")
         from video_generator import build_video
-        build_video(rhyme, audio_path, str(temp_dir), output_path, segments)
+        build_video(visual_path, is_video, audio_path,
+                    str(temp_dir), output_path, total_seconds)
 
-        # 5. Generate SEO metadata
+        # 5. SEO metadata
         from seo_generator import generate_seo
-        seo = generate_seo(rhyme, args.slot)
-
+        seo = generate_seo(theme, args.duration)
         print(f"\n--- SEO Preview ---")
         print(f"Title: {seo['title']}")
         print(f"Tags ({len(seo['tags'])}): {', '.join(seo['tags'][:5])}...")
@@ -75,8 +88,8 @@ def main():
         privacy = "private" if args.private else "public"
         video_id = upload_video(youtube, output_path, seo, privacy, args.slot)
 
-        # 7. Mark as uploaded
-        mark_uploaded(rhyme["id"])
+        # 7. Mark theme as uploaded
+        mark_uploaded(theme["id"])
         print(f"\nDone! https://youtube.com/watch?v={video_id}")
 
     except Exception as e:
@@ -84,9 +97,8 @@ def main():
         raise
 
     finally:
-        # Clean up temp files
         if temp_dir.exists() and not args.dry_run:
-            shutil.rmtree(temp_dir)
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":

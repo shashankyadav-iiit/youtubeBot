@@ -13,12 +13,11 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 CLIENT_SECRET_FILE = Path("credentials/client_secret.json")
 TOKEN_FILE = Path("credentials/token.json")
 
+# Sleep viewers search in the evening/night — publish then.
 SLOT_TIMES_UTC = {
-    "dawn": "11:00",       # 6am EST = 11am UTC
-    "morning": "14:00",    # 9am EST = 2pm UTC
-    "afternoon": "18:00",  # 1pm EST = 6pm UTC
-    "afterschool": "21:00", # 4pm EST = 9pm UTC
-    "evening": "00:00",    # 7pm EST = midnight UTC (next day)
+    "night": "01:00",      # 8pm EST = 1am UTC (next day)
+    "evening": "23:00",    # 6pm EST = 11pm UTC
+    "afternoon": "19:00",  # 2pm EST = 7pm UTC
 }
 
 
@@ -75,14 +74,14 @@ def upload_video(youtube, video_path: str, seo: dict, privacy: str = "public",
         "title": seo["title"],
         "description": seo["description"],
         "tags": seo["tags"],
-        "categoryId": seo.get("category_id", "22"),
+        "categoryId": seo.get("category_id", "10"),
         "defaultLanguage": "en",
         "defaultAudioLanguage": "en",
     }
 
     status = {
         "privacyStatus": "private" if publish_at else privacy,
-        "selfDeclaredMadeForKids": True,
+        "selfDeclaredMadeForKids": False,
     }
 
     if publish_at:

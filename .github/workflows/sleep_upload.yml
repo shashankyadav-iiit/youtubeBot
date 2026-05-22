@@ -1,8 +1,8 @@
-name: Morning Upload (9am EST)
+name: Sleep Soundscape Upload
 
 on:
   schedule:
-    - cron: '0 14 * * *'   # 2pm UTC = 9am EST
+    - cron: '0 18 */3 * *'   # every 3 days, 1pm EST — publishes that night
   workflow_dispatch:
 
 permissions:
@@ -11,11 +11,18 @@ permissions:
 jobs:
   upload:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo apt-get clean
+          df -h /
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -36,13 +43,18 @@ jobs:
           echo "${{ secrets.YOUTUBE_CLIENT_SECRET_B64 }}" | base64 --decode > credentials/client_secret.json
           echo "${{ secrets.YOUTUBE_TOKEN_JSON_B64 }}" | base64 --decode > credentials/token.json
 
-      - name: Run nursery rhyme bot
-        run: python3 main.py --slot morning
+      - name: Run sleep soundscape bot
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          BOT_WORK_DIR: /mnt/bot_temp
+        run: |
+          sudo mkdir -p /mnt/bot_temp && sudo chmod 777 /mnt/bot_temp
+          python3 main.py --slot night --duration 3
 
       - name: Save updated uploaded.json
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: mark morning slot rhyme as uploaded"
+          commit_message: "chore: mark soundscape theme as uploaded"
           file_pattern: data/uploaded.json
-          commit_user_name: "Nursery Bot"
+          commit_user_name: "Sleep Bot"
           commit_user_email: "bot@github-actions"
