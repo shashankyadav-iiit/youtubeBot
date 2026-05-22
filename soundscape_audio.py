@@ -119,22 +119,23 @@ def _crackle(sr):
 
 
 def _thunder(n, sr):
-    """Sparse low rumble swells."""
+    """Rolling thunder rumbles — audible body, not just sub-bass."""
     out = np.zeros(n, dtype=np.float32)
-    count = max(1, int(n / sr / 26))   # ~one every 26s
+    count = max(2, int(n / sr / 17))   # ~one every 17s
     for _ in range(count):
-        dur = np.random.uniform(3.0, 7.0)
+        dur = np.random.uniform(3.5, 8.0)
         m = min(n, int(dur * sr))
         rumble = brown_noise(m)
-        attack = int(m * 0.18)
+        attack = int(m * 0.12)
         env = np.concatenate([
             np.linspace(0, 1, attack),
-            np.exp(-np.linspace(0, 4, m - attack)),
+            np.exp(-np.linspace(0, 3.5, m - attack)),
         ]).astype(np.float32)
         rumble *= env[:m]
         pos = np.random.randint(0, max(1, n - m))
-        out[pos:pos + m] += rumble * np.random.uniform(0.6, 1.0)
-    return _butter(out, sr, 190.0, "low")
+        out[pos:pos + m] += rumble * np.random.uniform(0.8, 1.0)
+    # Lowpass at 450 Hz keeps weight but stays audible on phone speakers.
+    return _butter(out, sr, 450.0, "low")
 
 
 def _crickets(n, sr):
@@ -172,9 +173,10 @@ def _build_rain(n, sr):
 
 
 def _build_thunderstorm(n, sr):
+    # Thunder is the dominant feature; rain is a supporting bed.
     rain = _build_rain(n, sr)
     thunder = _thunder(n, sr)
-    return _mix((rain, 0.85), (thunder, 0.9))
+    return _mix((rain, 0.6), (thunder, 1.8))
 
 
 def _build_ocean(n, sr):
