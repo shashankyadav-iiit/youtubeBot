@@ -7,3 +7,4 @@ __pycache__/
 *.pyc
 .env
 output_*.mp4
+.DS_Store
